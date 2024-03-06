@@ -1,5 +1,6 @@
 #include <cmath>
 #include <iostream>
+#include <iomanip>
 #include <fstream>
 #include <tuple>
 #include <cassert>
@@ -149,7 +150,6 @@ co_vec_t contourtoxy(const co_vec_t& sc0, const int N)
 {
   const size_t I = sc0.size();
   const double frac = 0.5/static_cast<double>(N);
-  std::cout << I << std::endl;
   co_vec_t xy0(I);
   for(size_t i=0; i<I; ++i)
   {
@@ -227,11 +227,16 @@ int main (int argc, char* argv [])
   in >> R;
   while (!in.eof())
   {
+    std::cout << "Generating star for R = "
+              << R << std::endl;
+
     int N = radtoN(R, cmax);
     int K = R/res;
     double rf = std::min(R - rmin, drmax)/R;
-    std::cout << R << " " << rf << " " << N << std::endl;
-    std::ofstream o (std::to_string(R) + ".svg");
+
+    std::ostringstream s;
+    s << std::setprecision(1) << std::fixed << R;
+    std::ofstream o (s.str() + ".svg");
     co_vec_t sc0 = contour(R, h, rf, hf, K, N);
     co_vec_t xy0 = contourtoxy(sc0, N);
     co_vec_t xyN = xy0toN(xy0, N);

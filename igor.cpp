@@ -237,6 +237,7 @@ int main (int argc, char* argv [])
   namespace po = boost::program_options;
   po::options_description desc ("options");
   desc.add_options()
+    ("help", "produce help message")
     ("res,r",              po::value<double>(&res)->default_value(0.1))
     ("height,h"          , po::value<double>(&h)->default_value(3.5))
     ("cmax,c"            , po::value<double>(&cmax)->default_value(4.0))
@@ -251,6 +252,11 @@ int main (int argc, char* argv [])
 
   po::variables_map vm;
   po::store(po::parse_command_line(argc, argv, desc), vm);
+  if (vm.count("help"))
+  {
+    std::cout << desc << std::endl;
+    return 0;
+  }
   std::ifstream in("igor.in");
   po::store(po::parse_config_file(in, desc), vm);
   in.close();

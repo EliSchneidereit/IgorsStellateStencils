@@ -6,6 +6,8 @@
 #include <cassert>
 #include <vector>
 
+#include "boost/program_options.hpp"
+
 /* For debugging purposes we can activate 
  * guarded vector access.
  */
@@ -90,22 +92,21 @@ inline co_t mirr(const co_t& xy, double c)
  *  @param K The number of jags of the star, used only to determine the number of
  *  points in the tangential part of the dataset.
  */
-co_vec_t contour(const double R, const double h, const double rf, const double hf, const int K, const int N)
+co_vec_t contour(const double R, const double h, const double ncd, const double rd, const double md, const int K, const int N)
 {
-  assert(rf <= 1.0);
-  assert(hf <= 1.0);
-  assert(rf > 0.0);
-  assert(hf > 0.0);
+  assert(ncd >= 0.0);
+  assert(rd >= ncd);
+  assert(md >= rd);
   assert(N > 0);
   assert(R > 0);
   assert(h >= 0);
 
-  const double s1 = R + h;
-  const double s2 = R * (1+hf*rf) + h;
-  const double s3 = R * (1+rf) + h;
+  const double s1 = R + h + ncd;
+  const double s2 = R + h + rd;
+  const double s3 = R + h + md;
 
   auto c1 = [&] (const double& s) { return 2.0*pi*s; };
-  auto c2 = [&] (const double& s) { return c1(s1) - 2.0*pi*(h + R*hf*rf)*(s-s1)/(R*hf*rf); };
+  auto c2 = [&] (const double& s) { return c1(s1) - 2.0*pi*(h + rd)*(s-s1)/(rd-ncd); };
   auto c3 = [&] (const double& s) { return c2(s2) - 2.0*pi*(s-s2); };
 
   auto c = [&] (double s)
@@ -188,7 +189,7 @@ co_vec_t xy0toN(const co_vec_t& xy0, const int N)
 
 /**Print an (x,y) dateset as an SVG file.
  */
-void print(const co_vec_t& xy, std::ostream& o)
+void print_svg(const co_vec_t& xy, std::ostream& o)
 {
   o << "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n"
     << "<svg version=\"1.1\">\n"
@@ -207,6 +208,17 @@ void print(const co_vec_t& xy, std::ostream& o)
     << std::flush;
 }
 
+/**Print an (x,y) dateset as simple xy
+ */
+void print_dat(const co_vec_t& xy, std::ostream& o)
+{
+  for (size_t k=0; k < xy.size(); ++k)
+    {
+      o << xy[k].first << " " << xy[k].second << "\n";
+    }
+    o << std::flush;
+}
+
 /**Trivial max jag circumference length to 
  * number of jags conversion.
  */
@@ -219,29 +231,59 @@ int radtoN(double r, double cmax)
  */
 int main (int argc, char* argv [])
 {
-  assert(argc == 2);
-  std::ifstream in(argv[1]);
-  double res, h, cmax, rmin, drmax, hf;
-  in >> res >> h >> cmax >> rmin >> drmax >> hf;
-  double R;
-  in >> R;
-  while (!in.eof())
+  double res, h, cmax, rmin, drmax, ncd, rf, Rf, Rl, Rs;
+  std::string of;
+
+  namespace po = boost::program_options;
+  po::options_description desc ("options");
+  desc.add_options()
+    ("res,r",              po::value<double>(&res)->default_value(0.1))
+    ("height,h"          , po::value<double>(&h)->default_value(3.5))
+    ("cmax,c"            , po::value<double>(&cmax)->default_value(4.0))
+    ("rmin,m"            , po::value<double>(&rmin)->default_value(1.5))
+    ("drmax,d"           , po::value<double>(&drmax)->default_value(4.0))
+    ("ncd,n"             , po::value<double>(&ncd)->default_value(2.0))
+    ("recover_fraction,f", po::value<double>(&rf)->default_value(1.0))
+    ("Rfirst"            , po::value<double>(&Rf)->default_value(5.0))
+    ("Rlast"             , po::value<double>(&Rl)->default_value(22.5))
+    ("Rstep"             , po::value<double>(&Rs)->default_value(0.5))
+    ("output_format,o"   , po::value<std::string>(&of)->default_value("svg"));
+
+  po::variables_map vm;
+  po::store(po::parse_command_line(argc, argv, desc), vm);
+  std::ifstream in("igor.in");
+  po::store(po::parse_config_file(in, desc), vm);
+  in.close();
+  po::notify(vm);
+
+  for(double R=Rf; R<=Rl; R += Rs)
   {
     std::cout << "Generating star for R = "
               << R << std::endl;
 
     int N = radtoN(R, cmax);
     int K = R/res;
-    double rf = std::min(R - rmin, drmax)/R;
+    std::cout << "K="<<K<<std::endl;
+    double md = std::min(R - rmin, drmax);
+    double rd = ncd + (md - ncd)*rf;
 
-    std::ostringstream s;
-    s << std::setprecision(1) << std::fixed << R;
-    std::ofstream o (s.str() + ".svg");
-    co_vec_t sc0 = contour(R, h, rf, hf, K, N);
+    co_vec_t sc0 = contour(R, h, ncd, rd, md, K, N);
     co_vec_t xy0 = contourtoxy(sc0, N);
     co_vec_t xyN = xy0toN(xy0, N);
-    print(xyN, o);
-    in >> R;
+    std::ostringstream s;
+    s << std::setprecision(1) << std::fixed << R;
+    if (of == "svg")
+    {
+      std::ofstream o (s.str() + ".svg");
+      print_svg(xyN, o);
+      o.close();
+    }
+    else
+    {
+      std::ofstream o (s.str() + ".dat");
+      print_dat(xyN, o);
+      o.close();
+    }
   }
   return 0;
 }

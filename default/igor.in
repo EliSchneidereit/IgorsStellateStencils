@@ -8,4 +8,4 @@ recover_fraction=1.0
 Rfirst=5.0
 Rlast=22.5
 Rstep=0.5
-output_format="gnuplot"
+output_format=svg

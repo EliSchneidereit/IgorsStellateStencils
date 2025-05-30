@@ -89,7 +89,7 @@ inline co_t mirr(const co_t& xy, double c)
  *  @param rf fraction of the radius that overlaps
  *  @param hf fraction of the overlap to use for recovering the compressed material
  *  @param K The number of points contained in the radial part of the dataset
- *  @param K The number of jags of the star, used only to determine the number of
+ *  @param N The number of jags of the star, used only to determine the number of
  *  points in the tangential part of the dataset.
  */
 co_vec_t contour(const double R, const double h, const double ncd, const double rd, const double md, const int K, const int N)
@@ -101,7 +101,7 @@ co_vec_t contour(const double R, const double h, const double ncd, const double 
   assert(R > 0);
   assert(h >= 0);
 
-  const double s1 = R + h + ncd;
+  const double s1 = R + h + ncd; 
   const double s2 = R + h + rd;
   const double s3 = R + h + md;
 
@@ -125,6 +125,7 @@ co_vec_t contour(const double R, const double h, const double ncd, const double 
   {
     return s1 + ds*static_cast<double>(k);
   };
+  assert(c(s3) >= 0);
   const int Kappa = floor(K + c(s3)/(ds*N*2));
   assert(Kappa >= K);
 
@@ -222,16 +223,17 @@ void print_dat(const co_vec_t& xy, std::ostream& o)
 /**Trivial max jag circumference length to 
  * number of jags conversion.
  */
-int radtoN(double r, double cmax)
+int radtoN(double r, double cmax, double amax)
 {
-  return static_cast<int>(ceil(2*pi*r/cmax));
+  return std::max(static_cast<int>(ceil(2*pi*r/cmax)), static_cast<int>(ceil(2*pi/amax)));
+
 }
 
 /**The main function.
  */
 int main (int argc, char* argv [])
 {
-  double res, h, cmax, rmin, drmax, ncd, rf, Rf, Rl, Rs;
+  double res, h, cmax, rmin, drmax, ncd, rf, Rf, Rl, Rs, amax;
   std::string of;
 
   namespace po = boost::program_options;
@@ -241,6 +243,7 @@ int main (int argc, char* argv [])
     ("res,r",              po::value<double>(&res)->default_value(0.1))
     ("height,h"          , po::value<double>(&h)->default_value(3.5))
     ("cmax,c"            , po::value<double>(&cmax)->default_value(4.0))
+    ("amax,a"            , po::value<double>(&amax)->default_value(4.0))
     ("rmin,m"            , po::value<double>(&rmin)->default_value(1.5))
     ("drmax,d"           , po::value<double>(&drmax)->default_value(4.0))
     ("ncd,n"             , po::value<double>(&ncd)->default_value(2.0))
@@ -267,17 +270,19 @@ int main (int argc, char* argv [])
     std::cout << "Generating star for R = "
               << R << std::endl;
 
-    int N = radtoN(R, cmax);
+    int N = radtoN(R, cmax, amax);
     int K = R/res;
     std::cout << "K="<<K<<std::endl;
-    double md = std::min(R - rmin, drmax);
+    double md = std::min(R - rmin, drmax); // Maximum overlap on top side.
+    assert(md > 0);
+    ncd = (ncd >= md) ? md*0.3 : ncd;  // Make sure, the not-cut-distance is smaller than the overlap.
     double rd = ncd + (md - ncd)*rf;
 
     co_vec_t sc0 = contour(R, h, ncd, rd, md, K, N);
     co_vec_t xy0 = contourtoxy(sc0, N);
     co_vec_t xyN = xy0toN(xy0, N);
     std::ostringstream s;
-    s << std::setprecision(1) << std::fixed << R;
+    s << std::setprecision(3) << std::fixed << R;
     if (of == "svg")
     {
       std::ofstream o (s.str() + ".svg");

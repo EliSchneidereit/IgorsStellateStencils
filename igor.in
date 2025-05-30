@@ -1,10 +1,12 @@
-res=0.25
+res=0.125
 height=3.5
 cmax=4.0
-rmin=1.5
+amax=0.524
+rmin=1.0
 drmax=4.0
 ncd=2.0
 recover_fraction=0.99
-Rfirst=5.0
+Rfirst=2.0
 Rlast=22.5
-Rstep=0.25
+Rstep=0.125
+output_format=gnuplot

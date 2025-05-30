@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="20mm"
+   height="60mm"
+   viewBox="0 0 20 60"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.4 (e7c3feb100, 2024-10-09)"
+   sodipodi:docname="drawing.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#ffffff"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="1"
+     inkscape:deskcolor="#505050"
+     inkscape:document-units="mm"
+     inkscape:zoom="5.701459"
+     inkscape:cx="55.073622"
+     inkscape:cy="119.09232"
+     inkscape:window-width="1920"
+     inkscape:window-height="1011"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs1">
+    <rect
+       x="17.611135"
+       y="20.587665"
+       width="12.650252"
+       height="14.634605"
+       id="rect2" />
+  </defs>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.93889px;font-family:Untitled1;-inkscape-font-specification:Untitled1;text-align:start;writing-mode:lr-tb;direction:ltr;text-anchor:start;white-space:pre;inline-size:33.8047;fill:#000000;stroke:#000000;stroke-width:0.0264583"
+       x="3.6095591"
+       y="7.022233"
+       id="text1"
+       transform="translate(-3.2728895,3.7329505)"><tspan
+         x="3.6095591"
+         y="7.022233"
+         id="tspan3">SC
+</tspan><tspan
+         x="3.6095591"
+         y="13.195846"
+         id="tspan4">HN
+</tspan><tspan
+         x="3.6095591"
+         y="19.369459"
+         id="tspan5">EI
+</tspan><tspan
+         x="3.6095591"
+         y="25.543071"
+         id="tspan6">DE
+</tspan><tspan
+         x="3.6095591"
+         y="31.716684"
+         id="tspan7">RE
+</tspan><tspan
+         x="3.6095591"
+         y="37.890296"
+         id="tspan8">IT</tspan></text>
+    <text
+       xml:space="preserve"
+       transform="scale(0.26458333)"
+       id="text2"
+       style="fill:#000000;stroke:#000000;stroke-width:0.1;text-orientation:auto;text-align:start;writing-mode:lr-tb;direction:ltr;-inkscape-font-specification:Untitled1;font-family:Untitled1;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;white-space:pre;shape-inside:url(#rect2)" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.175px;font-family:Untitled1;-inkscape-font-specification:Untitled1;text-align:center;writing-mode:lr-tb;direction:ltr;text-anchor:middle;fill:#000000;stroke:#000000;stroke-width:0.0264583"
+       x="-25.031494"
+       y="16.485201"
+       id="text18"
+       transform="rotate(-90)"><tspan
+         sodipodi:role="line"
+         id="tspan18"
+         style="stroke-width:0.0264583"
+         x="-25.031494"
+         y="16.485201">MARKNEUKIRCHEN</tspan></text>
+  </g>
+</svg>

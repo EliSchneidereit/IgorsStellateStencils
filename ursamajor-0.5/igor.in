@@ -1,0 +1,12 @@
+res=0.5
+height=5.125
+cmax=4.0
+amax=0.524
+rmin=1.0
+drmax=2.375
+ncd=2.0
+recover_fraction=1.0
+Rfirst=2.0
+Rlast=70.0
+Rstep=0.125
+output_format=svg

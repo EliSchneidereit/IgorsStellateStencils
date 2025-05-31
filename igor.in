@@ -1,12 +1,12 @@
-res=0.125
+res=0.25
 height=3.5
 cmax=4.0
 amax=0.524
 rmin=1.0
-drmax=4.0
-ncd=2.0
+drmax=2.5
+ncd=8
 recover_fraction=0.99
 Rfirst=2.0
 Rlast=70.0
-Rstep=0.125
-output_format=svg
+Rstep=1.0
+output_format=andere
